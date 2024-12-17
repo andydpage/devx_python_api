@@ -1,0 +1,65 @@
+inputSet:
+  name: default
+  identifier: default
+  orgIdentifier: sandbox
+  projectIdentifier: devx_andypage
+  pipeline:
+    identifier: devx_pipeline
+    stages:
+      - stage:
+          identifier: Deploy_Dev
+          type: Deployment
+          spec:
+            services:
+              values:
+                - serviceInputs:
+                    serviceDefinition:
+                      type: Kubernetes
+                      spec:
+                        artifacts:
+                          primary:
+                            primaryArtifactRef: backend
+                  serviceRef: devxbackend
+      - stage:
+          identifier: Deploy_QA
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: frontend
+      - stage:
+          identifier: Deploy_Prod
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: backend
+      - stage:
+          identifier: Destroy
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: backend
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
