@@ -42,6 +42,7 @@ class ExecutionDetails(APIView):
         "application_version": application_version,
         "deployment_type": deployment_type
         }
+        print(payload)
         return JsonResponse(payload,safe=False)
 
 class RequestEntryCreate(generics.CreateAPIView):
